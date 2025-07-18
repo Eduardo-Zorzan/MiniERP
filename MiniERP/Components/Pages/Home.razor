@@ -1,0 +1,23 @@
+﻿@page "/"
+@using MiniERP.Database.Models
+@using MiniERP.Database.Services.Users
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code {
+
+
+	protected override async Task OnInitializedAsync()
+    {
+        User test = new User
+		{
+			Login = "dsadsa",
+			Name = "dasdasdasd",
+			Password = "wq3412321"
+		};
+
+        await UserService.AddUser(test);
+    }
+}
