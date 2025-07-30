@@ -5,6 +5,8 @@ namespace MiniERP.Database.Models
 {
 	public class User
 	{
+		public User() { }
+
 		[Required, NotNull, PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 		[Required, NotNull]

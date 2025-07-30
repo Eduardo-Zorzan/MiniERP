@@ -2,22 +2,68 @@
 @using MiniERP.Database.Models
 @using MiniERP.Database.Services.Users
 
-<h1>Hello, world!</h1>
+@inject IUserService UserService;
+<div>
+	<div class="form-check row">
+		<label class="form-label col-md-3">User:</label>
+		<div class="col-md-8">
+			<input id="user" class="form-control" onchange="userChanged" />
+		</div>
+	</div>
+</div>
 
-Welcome to your new app.
+<button id="btnTeste" onclick="btnTesteClick">@userLogin</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger">
+		@errorMessage
+	</div>
+}
 
 @code {
-
-
+	private string errorMessage = "";
+	private string userLogin = "";
 	protected override async Task OnInitializedAsync()
-    {
-        User test = new User
-		{
-			Login = "dsadsa",
-			Name = "dasdasdasd",
-			Password = "wq3412321"
-		};
+	{
+		// User test = new User
+		// {
+		// 	Login = "dsadsa",
+		// 	Name = "dasdasdasd",
+		// 	Password = "wq3412321"
+		// };
 
-        await UserService.AddUser(test);
-    }
+		// try
+		// {
+		// 	await UserService.AddUser(test);
+		// } catch(Exception e)
+		// {
+		// 	errorMessage = e.ToString();
+		// }
+
+		User user = await UserService.GetUsersByLogin("dsadsa");
+		userLogin = user?.Login ?? "User not found";
+
+	}
+
+	protected async Task userChanged(ChangeEventArgs e)
+	{
+		var newLogin = e.Value?.ToString();
+		if (!string.IsNullOrEmpty(newLogin))
+		{
+			try
+			{
+				User user = await UserService.GetUsersByLogin(newLogin);
+				userLogin = user?.Login ?? "User not found";
+			}
+			catch (Exception ex)
+			{
+				errorMessage = ex.Message;
+			}
+		}
+		else
+		{
+			userLogin = "User not found";
+		}
+	}
 }
