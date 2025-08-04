@@ -1,22 +1,42 @@
 ﻿@page "/"
 @using MiniERP.Database.Models
 @using MiniERP.Database.Services.Users
+@using MiniERP.BusinessRules.Login
+@using MiniERP.BusinessRules.Login.Entities
 
 @inject IUserService UserService;
-<div>
-	<div class="form-check row">
-		<label class="form-label col-md-3">User:</label>
-		<div class="col-md-8">
-			<input id="user" class="form-control" onchange="userChanged" />
+
+<content>
+	<div class="container-fluid flex-column align-items-center justify-content-center">
+		<div class="form-check row">
+			<label class="form-label">User:</label>
+			<div >
+				<input id="inpUser" class="form-control" @bind="userLogin" />
+			</div>
+		</div>
+		<div class="form-check row">
+			<label class="form-label">Password:</label>
+			<div >
+				<input id="inpPassword" class="form-control" />
+			</div>
+		</div>
+		<div class="form-check row mt-2">
+			<div class="d-inline-flex gap-2">
+				<button id="btnRegister" @onclick="Register" style="width:100%">Register</button>
+				<button id="btnLogin" @onclick="TryAccess" style="width:100%">Access</button>
+			</div>
+			<div>
+				@testResult
+				@testKey
+				@testIv
+			</div>
 		</div>
 	</div>
-</div>
-
-<button id="btnTeste" onclick="btnTesteClick">@userLogin</button>
+</content>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
-	<div class="alert alert-danger">
+	<div class="alert alert-danger" style="position:sticky">
 		@errorMessage
 	</div>
 }
@@ -24,37 +44,21 @@
 @code {
 	private string errorMessage = "";
 	private string userLogin = "";
-	protected override async Task OnInitializedAsync()
+	private string testResult = "";
+	private byte[]? testIv = null;
+	private byte[]? testKey = null;
+
+	protected async Task TryAccess()
 	{
-		// User test = new User
-		// {
-		// 	Login = "dsadsa",
-		// 	Name = "dasdasdasd",
-		// 	Password = "wq3412321"
-		// };
 
-		// try
-		// {
-		// 	await UserService.AddUser(test);
-		// } catch(Exception e)
-		// {
-		// 	errorMessage = e.ToString();
-		// }
-
-		User user = await UserService.GetUsersByLogin("dsadsa");
-		userLogin = user?.Login ?? "User not found";
-
-	}
-
-	protected async Task userChanged(ChangeEventArgs e)
-	{
-		var newLogin = e.Value?.ToString();
-		if (!string.IsNullOrEmpty(newLogin))
+		if (!string.IsNullOrEmpty(userLogin))
 		{
 			try
 			{
-				User user = await UserService.GetUsersByLogin(newLogin);
-				userLogin = user?.Login ?? "User not found";
+				MV_CriptographyReturn returned = await Cryptography.Encrypt(userLogin);
+				testResult = returned.Output;
+				testIv = returned.Iv;
+				testKey = returned.Key;
 			}
 			catch (Exception ex)
 			{
@@ -63,7 +67,34 @@
 		}
 		else
 		{
-			userLogin = "User not found";
+			errorMessage = "User not found";
+		}
+	}
+
+	protected async Task Register()
+	{
+		if (!string.IsNullOrEmpty(userLogin))
+		{
+			try
+			{
+				MV_CriptographyReturn decrypt = new MV_CriptographyReturn
+				{
+					Iv = testIv,
+					Key = testKey,
+					Output = testResult
+				};
+
+				string result = await Cryptography.Decrypt(decrypt);
+				errorMessage = result;
+			}
+			catch (Exception ex)
+			{
+				errorMessage = ex.Message;
+			}
+		}
+		else
+		{
+			errorMessage = "Please fill in all fields.";
 		}
 	}
 }

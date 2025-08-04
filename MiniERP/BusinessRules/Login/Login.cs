@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MiniERP.BusinessRules.Users
 {
-	public class User
+	public class Login
 	{
+		
 	}
 }

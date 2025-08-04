@@ -72,4 +72,8 @@
         <PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Bussiness\Users\" />
+    </ItemGroup>
+
 </Project>
