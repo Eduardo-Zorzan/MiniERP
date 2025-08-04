@@ -15,7 +15,6 @@ namespace MiniERP
                 });
 
 			builder.Services.AddSingleton<Database.Services.Users.IUserService, Database.Services.Users.UserService>();
-           //builder.Services.AddSingleton<BusinessRules.Login.Cryptography>();
 			builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
