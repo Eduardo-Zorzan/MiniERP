@@ -1,6 +1,6 @@
 @API_HostAddress = http://localhost:5078
 
-GET {{API_HostAddress}}/todos/
+POST {{API_HostAddress}}/SaveUser/
 Accept: application/json
 
 ###
