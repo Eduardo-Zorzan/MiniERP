@@ -1,17 +1,10 @@
-﻿using System;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 
-namespace MiniERP.BusinessRules.Login
+namespace API.BussinessRules.Cryptography
 {
 	public class Cryptography
 	{
-		public static async Task<Entities.MV_CriptographyReturn> Encrypt(string input)
+		public static async Task<Entities.CriptographyReturn> Encrypt(string input)
 		{
 			if	(string.IsNullOrEmpty(input))
 				throw new ArgumentException("Input cannot be null or empty.", nameof(input));
@@ -26,7 +19,7 @@ namespace MiniERP.BusinessRules.Login
 				iv = tripleDes.IV;
 			}
 
-			Entities.MV_CriptographyReturn criptographyReturn = new Entities.MV_CriptographyReturn
+			Entities.CriptographyReturn criptographyReturn = new Entities.CriptographyReturn
 			{
 				Key = key,
 				Iv = iv,
@@ -36,8 +29,9 @@ namespace MiniERP.BusinessRules.Login
 			return criptographyReturn;
 		}
 
-		public static async Task<string> Decrypt(Entities.MV_CriptographyReturn criptography)
+		public static async Task<string> Decrypt(Entities.CriptographyReturn criptography)
 		{
+
 			return await DecryptTextFromFile(criptography.Output, criptography.Key, criptography.Iv);
 		}
 

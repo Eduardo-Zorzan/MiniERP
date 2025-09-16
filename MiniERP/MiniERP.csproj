@@ -73,7 +73,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Bussiness\Users\" />
+      <Folder Include="BusinessRules\" />
     </ItemGroup>
 
 </Project>

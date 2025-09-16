@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniERP.BusinessRules.Login.Entities
+namespace API.BussinessRules.Cryptography.Entities
 {
-	public class MV_CriptographyReturn
+	public class CriptographyReturn
 	{
 		public required byte[] Key { get; set; }
 		public required byte[] Iv { get; set; }

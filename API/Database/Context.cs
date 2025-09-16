@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
-using DotNetEnv;
+﻿using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Database
 {
@@ -16,6 +14,11 @@ namespace API.Database
 			string ? connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
 			?? throw new InvalidOperationException("Database connection string is not set.");
 			options.UseSqlServer(connectionString);
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.HasDefaultSchema("dbo"); 
 		}
 	}
 }

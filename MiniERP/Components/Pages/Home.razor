@@ -1,8 +1,7 @@
 ﻿@page "/"
 @using MiniERP.Database.Models
 @using MiniERP.Database.Services.Users
-@using MiniERP.BusinessRules.Login
-@using MiniERP.BusinessRules.Login.Entities
+
 
 @inject IUserService UserService;
 
@@ -53,17 +52,7 @@
 
 		if (!string.IsNullOrEmpty(userLogin))
 		{
-			try
-			{
-				MV_CriptographyReturn returned = await Cryptography.Encrypt(userLogin);
-				testResult = returned.Output;
-				testIv = returned.Iv;
-				testKey = returned.Key;
-			}
-			catch (Exception ex)
-			{
-				errorMessage = ex.Message;
-			}
+		
 		}
 		else
 		{
@@ -77,15 +66,6 @@
 		{
 			try
 			{
-				MV_CriptographyReturn decrypt = new MV_CriptographyReturn
-				{
-					Iv = testIv,
-					Key = testKey,
-					Output = testResult
-				};
-
-				string result = await Cryptography.Decrypt(decrypt);
-				errorMessage = result;
 			}
 			catch (Exception ex)
 			{

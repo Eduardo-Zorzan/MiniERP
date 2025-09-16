@@ -11,7 +11,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 
 RouteGroupBuilder saveUser = app.MapGroup("/SaveUser");
-saveUser.MapPost("/", (MV_SaveUser body, HttpRequest request) =>
+saveUser.MapPost("/", (User body, HttpRequest request) =>
 {
 	var authorizationToken = request.Headers["Authorization"].ToString();
 	if (body is null)
@@ -34,7 +34,7 @@ saveUser.MapPost("/", (MV_SaveUser body, HttpRequest request) =>
 
 app.Run();
 
-[JsonSerializable(typeof(MV_SaveUser))]
+[JsonSerializable(typeof(User))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 

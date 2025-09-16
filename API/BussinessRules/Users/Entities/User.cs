@@ -1,9 +1,9 @@
 ﻿namespace API.BussinessRules.Users.Entities
 {
-	public class MV_SaveUser
+	public class User
 	{
 		public required string Login { get; set; }
-		public required string Name { get; set; }
+		public string? Name { get; set; }
 		public required string Password { get; set; }
 
 	}
