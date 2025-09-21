@@ -1,7 +1,8 @@
-@API_HostAddress = http://localhost:5078
+@API_HostAddress = http://localhost:32768
 
 POST {{API_HostAddress}}/SaveUser/
 Accept: application/json
 
 ###
-
+POST {{API_HostAddress}}/user/v1/register
+Accept: application/json

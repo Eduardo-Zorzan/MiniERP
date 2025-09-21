@@ -8,9 +8,12 @@ namespace API.BussinessRules.JWT
 {
 	public class TokenService
 	{
+		private JwtSecurityTokenHandler _tokenHandler
+		{
+			get { return _tokenHandler ?? new JwtSecurityTokenHandler(); }
+		}
 		public string GenerateToken(User user)
 		{
-			var tokenHandler = new JwtSecurityTokenHandler();
 			var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ?? "");
 			
 			var claims = user.GetClaims();
@@ -21,8 +24,13 @@ namespace API.BussinessRules.JWT
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
-			var token = tokenHandler.CreateToken(tokenDescriptor);
-			return tokenHandler.WriteToken(token);
+			var token = _tokenHandler.CreateToken(tokenDescriptor);
+			return _tokenHandler.WriteToken(token);
+		}
+
+		public void CheckToken(string token)
+		{
+			
 		}
 	}
 

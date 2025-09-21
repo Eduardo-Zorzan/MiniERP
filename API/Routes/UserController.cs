@@ -4,17 +4,16 @@ using API.BussinessRules.JWT;
 using API.BussinessRules.Users;
 using API.BussinessRules.Users.Entities;
 using API.Database;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace API.Routes
 {
 	[Authorize]
+	[Route("api/user")]
 	[ApiController]
-	[Route("user")]
 	public class UserController : ControllerBase
 	{
 
@@ -23,7 +22,8 @@ namespace API.Routes
 		public async Task<IActionResult> Register([FromBody] User model,
 											  [FromServices] Context context)
 		{
-			if (!ModelState.IsValid) return BadRequest(ModelState);
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
 
 			var user = new User
 			{
@@ -35,30 +35,23 @@ namespace API.Routes
 			string? evString = Environment.GetEnvironmentVariable("EV");
 			string? keyString = Environment.GetEnvironmentVariable("KEY");
 
+			Env.Load();
 			if (string.IsNullOrWhiteSpace(evString) || string.IsNullOrWhiteSpace(keyString))
-			{
-				CriptographyReturn returned = await Cryptography.Encrypt(model.Password);
+				throw new Exception("Key encryption not set on .env file");
 
-				user.Password = returned.Output;
-				Environment.SetEnvironmentVariable("EV", Convert.ToBase64String(returned.Iv));
-				Environment.SetEnvironmentVariable("KEY", Convert.ToBase64String(returned.Key));
+			byte[] ev = Convert.FromBase64String(evString);
+			byte[] key = Convert.FromBase64String(keyString);
 
-			} else
-			{ 
-				byte[] ev = Convert.FromBase64String(evString);
-				byte[] key = Convert.FromBase64String(keyString);
-
-				user.Password = await Cryptography.Encrypt(model.Password, key, ev);
-			}
+			user.Password = await Cryptography.Encrypt(model.Password, key, ev);
 
 			try
 			{
 				new SaveUser(context).Save(user, true);
-				return Ok($"{user.Login} {user.Password}");
+				return Ok($"{user.Login} {model.Password}");
 			}
-			catch
+			catch (Exception ex)
 			{
-				return StatusCode(500, "Internal Error");
+				return StatusCode(500, ex.Message);
 			}
 		}
 
@@ -70,29 +63,29 @@ namespace API.Routes
 	   [FromServices] Context context,
 	   [FromServices] TokenService tokenService)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState.Values);
-
-			var user = await context
-				.Users
-				.AsNoTracking()
-				.FirstOrDefaultAsync(x => x.Login == model.Login);
-
-			if (user == null)
-				return StatusCode(401, "User or password invalid");
-			
-			CriptographyReturn criptography = new CriptographyReturn
-			{
-				Output = user.Password,
-				Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
-				Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
-			};
-			
-			if (!model.Password.Equals(Cryptography.Decrypt(criptography)))
-				return StatusCode(401, "User or password invalid");
-
 			try
 			{
+				if (!ModelState.IsValid)
+					return BadRequest(ModelState.Values);
+
+				var user = await context
+					.Users
+					.AsNoTracking()
+					.FirstOrDefaultAsync(x => x.Login == model.Login);
+
+				if (user == null)
+					return StatusCode(401, "User or password invalid");
+
+				CriptographyReturn criptography = new CriptographyReturn
+				{
+					Output = user.Password,
+					Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
+					Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
+				};
+
+				if (!model.Password.Equals(await Cryptography.Decrypt(criptography)))
+					return StatusCode(401, "User or password invalid");
+
 				var token = tokenService.GenerateToken(model);
 				return Ok(token);
 			}

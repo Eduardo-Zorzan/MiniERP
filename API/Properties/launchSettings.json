@@ -12,7 +12,6 @@
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
-      "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/todos",
       "environmentVariables": {
         "ASPNETCORE_HTTP_PORTS": "8080"
