@@ -1,0 +1,47 @@
+﻿@page "/"
+@using MiniERP.Database.Models
+@using MiniERP.Database.Services.Users
+
+
+@inject IUserService UserService;
+
+<content>
+	<div class="p-0 flex-md-column align-items-center justify-content-center">
+		<div class="mb-2 mt-2 d-flex justify-content-center">
+			<img src="img/default.png" class="img-thumbnail" style="width:200px; height:200px;" alt="logo" />
+		</div>
+		<div class="mb-2">
+			<label class="form-label">Login:</label>
+			<div>
+				<input id="inpUser" class="form-control" @bind="userLogin" />
+			</div>
+		</div>
+		<div class="mb-2">
+			<label class="form-label">Password:</label>
+			<div>
+				<input id="inpPassword" class="form-control" />
+			</div>
+		</div>
+		<div class="mt-2">
+			<div class="mb-2">
+				<button id="btnLogin" class="button">Access</button>
+			</div>
+			<div class="">
+				<button id="btnRegister" class="button">Register</button>
+			</div>
+		</div>
+	</div>
+</content>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger" style="position:sticky">
+		@errorMessage
+	</div>
+}
+
+@code {
+	private string errorMessage = "";
+	private string userLogin = "";
+	private string testResult = "";
+}

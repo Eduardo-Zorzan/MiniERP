@@ -28,9 +28,23 @@ namespace API.BussinessRules.JWT
 			return _tokenHandler.WriteToken(token);
 		}
 
-		public void CheckToken(string token)
+		public void ValidateToken(string token)
 		{
-			
+			try
+			{
+				_tokenHandler.ValidateToken(token, new TokenValidationParameters
+				{
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ?? "")),
+					ValidateIssuer = false,
+					ValidateAudience = false,
+					ClockSkew = TimeSpan.Zero
+				}, out SecurityToken validatedToken);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Invalid token", ex);
+			}
 		}
 	}
 
