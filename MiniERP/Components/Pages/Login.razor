@@ -1,14 +1,16 @@
 ﻿@page "/"
-@using MiniERP.Database.Models
-@using MiniERP.Database.Services.Users
-
-
-@inject IUserService UserService;
+@using MiniERP.BusinessRules.Login.Entities
 
 <content>
+	<div>
+		<label class="switch">
+			<input type="checkbox" >
+			<span class="slider"></span>
+		</label>
+	</div>
 	<div class="p-0 flex-md-column align-items-center justify-content-center">
 		<div class="mb-2 mt-2 d-flex justify-content-center">
-			<img src="img/default.png" class="img-thumbnail" style="width:200px; height:200px;" alt="logo" />
+			<img src="img/default.png" class="img-thumbnail" alt="logo" />
 		</div>
 		<div class="mb-2">
 			<label class="form-label">Login:</label>
@@ -19,12 +21,12 @@
 		<div class="mb-2">
 			<label class="form-label">Password:</label>
 			<div>
-				<input id="inpPassword" class="form-control" />
+				<input id="inpPassword" class="form-control" @bind="userPassword" />
 			</div>
 		</div>
 		<div class="mt-2">
 			<div class="mb-2">
-				<button id="btnLogin" class="button">Access</button>
+				<button id="btnLogin" class="button" @onclick="UserLogin">Access</button>
 			</div>
 			<div class="">
 				<button id="btnRegister" class="button">Register</button>
@@ -43,5 +45,24 @@
 @code {
 	private string errorMessage = "";
 	private string userLogin = "";
-	private string testResult = "";
+	private string userPassword = "";
+
+	private async Task UserLogin(MouseEventArgs e)
+	{
+		User user = new User
+		{
+			Login = userLogin,
+			Password = userPassword
+		};
+
+		try
+		{
+			await new MiniERP.BusinessRules.Login.Login(user).TryLogin();
+		}
+		catch (Exception ex)
+		{
+			errorMessage = ex.Message;
+		}
+
+	}
 }

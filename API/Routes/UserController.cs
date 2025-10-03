@@ -63,35 +63,53 @@ namespace API.Routes
 	   [FromServices] Context context,
 	   [FromServices] TokenService tokenService)
 		{
-			try
+
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState.Values);
+
+			if (string.IsNullOrWhiteSpace(model.Token))
 			{
-				if (!ModelState.IsValid)
-					return BadRequest(ModelState.Values);
-
-				var user = await context
-					.Users
-					.AsNoTracking()
-					.FirstOrDefaultAsync(x => x.Login == model.Login);
-
-				if (user == null)
-					return StatusCode(401, "User or password invalid");
-
-				CriptographyReturn criptography = new CriptographyReturn
+				try
 				{
-					Output = user.Password,
-					Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
-					Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
-				};
+					var user = await context
+								.Users
+								.AsNoTracking()
+								.FirstOrDefaultAsync(x => x.Login == model.Login);
 
-				if (!model.Password.Equals(await Cryptography.Decrypt(criptography)))
-					return StatusCode(401, "User or password invalid");
+					if (user == null)
+						return StatusCode(401, "User or password invalid");
 
-				var token = tokenService.GenerateToken(model);
-				return Ok(token);
+					CriptographyReturn criptography = new CriptographyReturn
+					{
+						Output = user.Password,
+						Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
+						Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
+					};
+
+					if (!(model.Password ?? "").Equals(await Cryptography.Decrypt(criptography)))
+						return StatusCode(401, "User or password invalid");
+
+					model.Token = tokenService.GenerateToken(model);
+					model.Name = user.Name;
+
+					return Ok(model);
+				}
+				catch 
+				{
+					return StatusCode(500, "Internal Error");
+				}
 			}
-			catch
+			else
 			{
-				return StatusCode(500, "Internal Error");
+				try
+				{
+					tokenService.ValidateToken(model.Token);
+					return Ok();
+				}
+				catch
+				{
+					return StatusCode(401, "Unauthorized");
+				}
 			}
 		}
 	}

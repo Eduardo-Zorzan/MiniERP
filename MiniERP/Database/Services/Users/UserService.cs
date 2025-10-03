@@ -9,7 +9,7 @@ namespace MiniERP.Database.Services.Users
 			await Init<Models.User>();
 		}
 
-		public async Task<Models.User> GetUser(string login, string password)
+		public async Task<Models.User> GetUser(string login)
 		{
 			await InitializeAsync();
 			var user = (from users in _db.Table<Models.User>()

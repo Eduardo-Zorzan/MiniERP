@@ -72,10 +72,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="BusinessRules\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<MauiCss Include="Components\Pages\Login.razor.css" />
 		<MauiAsset Include="wwwroot\**" />
 	</ItemGroup>

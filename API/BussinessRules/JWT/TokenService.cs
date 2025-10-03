@@ -8,10 +8,8 @@ namespace API.BussinessRules.JWT
 {
 	public class TokenService
 	{
-		private JwtSecurityTokenHandler _tokenHandler
-		{
-			get { return _tokenHandler ?? new JwtSecurityTokenHandler(); }
-		}
+		private readonly JwtSecurityTokenHandler _tokenHandler = new();
+
 		public string GenerateToken(User user)
 		{
 			var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ?? "");
