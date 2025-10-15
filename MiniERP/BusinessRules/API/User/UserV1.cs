@@ -12,11 +12,11 @@ namespace MiniERP.BusinessRules.API.User
 	public static class UserV1
 	{
 		private const string prefix = "api/User/v1";
-		static HttpClient client = new HttpClient();
 
 		public static async Task<Login.Entities.User?> Login(Login.Entities.User user, string token)
 		{
-			client.BaseAddress = new Uri("http://localhost:64195/");
+			HttpClient client = new HttpClient();
+			client.BaseAddress = new Uri("http://192.168.18.38:5078");
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
