@@ -1,46 +1,47 @@
 ﻿@page "/"
 @using MiniERP.BusinessRules.Login.Entities
 
-<content>
-	<div>
-		<label class="switch">
-			<input type="checkbox" >
-			<span class="slider"></span>
-		</label>
-	</div>
-	<div class="p-0 flex-md-column align-items-center justify-content-center">
-		<div class="mb-2 mt-2 d-flex justify-content-center">
-			<img src="img/default.png" class="img-thumbnail" alt="logo" />
+<div id="container" class="mr-0">
+	<content >
+		<div>
+			<label class="switch">
+				<input type="checkbox" >
+				<span class="slider"></span>
+			</label>
 		</div>
-		<div class="mb-2">
-			<label class="form-label">Login:</label>
-			<div>
-				<input id="inpUser" class="form-control" @bind="userLogin" />
+		<div id="login-container" class="p-0 flex-md-column align-items-center justify-content-center">
+			<div class="mb-2 mt-2 d-flex justify-content-center">
+				<img src="img/default.png" class="img-thumbnail" alt="logo" />
 			</div>
-		</div>
-		<div class="mb-2">
-			<label class="form-label">Password:</label>
-			<div>
-				<input id="inpPassword" class="form-control" @bind="userPassword" />
-			</div>
-		</div>
-		<div class="mt-2">
 			<div class="mb-2">
-				<button id="btnLogin" class="button" @onclick="UserLogin">Access</button>
+				<label class="form-label">Login:</label>
+				<div>
+					<input id="inpUser" class="form-control" @bind="userLogin" />
+				</div>
 			</div>
-			<div class="">
-				<button id="btnRegister" class="button">Register</button>
+			<div class="mb-2">
+				<label class="form-label">Password:</label>
+				<div>
+					<input id="inpPassword" class="form-control" @bind="userPassword" />
+				</div>
 			</div>
+			<div class="mt-2">
+				<div class="mb-2">
+					<button id="btnLogin" class="button" @onclick="UserLogin">Access</button>
+				</div>
+				<div class="">
+					<button id="btnRegister" class="button">Register</button>
+				</div>
+			</div>
+			@if (!string.IsNullOrEmpty(errorMessage))
+			{
+				<div class="alert alert-danger mt-4" style="position:sticky">
+					@errorMessage
+				</div>
+			}
 		</div>
-	</div>
-</content>
-
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-	<div class="alert alert-danger" style="position:sticky">
-		@errorMessage
-	</div>
-}
+	</content>
+</div>
 
 @code {
 	private string errorMessage = "";
