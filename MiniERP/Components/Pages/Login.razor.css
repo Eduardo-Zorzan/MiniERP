@@ -16,16 +16,30 @@
     initial-value: rgb(95 157 231 / 48%);
 }
 
+@property --text-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: black;
+}
 
 #container {
     min-height: 100vh;
     min-width: 100vw;
     background-color: var(--bg-color);
     margin-left: 0;
+    padding: 1rem;
 }
 
-#inpUser, #inpPassword {
+#inpUser input, #inpPassword input {
     background-color: var(--bg-color)
+}
+
+#inpUser label, #inpPassword label {
+    color: var(--text-color)
+}
+
+#login-container  {
+    background-color: var(--bg-color);
 }
 
 .button {
@@ -49,11 +63,12 @@
     transition: 0.2s;
     box-shadow: none;
     width: 100%;
+    color: var(--text-color);
 }
 
-    .button:active {
-        box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px var(--button-hover-shadow);
-    }
+.button:active {
+    box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px var(--button-hover-shadow);
+}
 
 .user-profile {
     width: 96px;
@@ -65,10 +80,9 @@
     box-shadow: 0px 0px 8px 0px rgb(95 157 231 / 48%);
 }
 
-#login-container:has(#inpPassword:hover, #inpUser:hover) {
+#login-container:has(#inpPassword input:hover, #inpUser input:hover) {
     height: 120vh;
 }
-
 
 /* From Uiverse.io by zebra76966 */
 .switch {
@@ -126,7 +140,8 @@
 /* From Uiverse.io by zebra76966 */
 
 #container:has(.switch > input:checked) {
-    --button-color: #000000;
+    --button-color: black;
     --bg-color: #0B192C;
+    --text-color: rgb(255 101 0);
 }
 
