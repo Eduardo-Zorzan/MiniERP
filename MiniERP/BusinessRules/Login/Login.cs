@@ -32,7 +32,7 @@ namespace MiniERP.BusinessRules.Login
 			{
 				user = new Database.Models.User
 				{
-					Login = _user.Login,
+					Email = _user.Login,
 					Token = _user.Token ?? "",
 					Name = _user.Name ?? ""
 				};

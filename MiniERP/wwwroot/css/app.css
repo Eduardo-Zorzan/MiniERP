@@ -71,6 +71,59 @@ h1:focus {
     display: none;
 }
 
+.field input {
+    background-color: var(--bg-color)
+}
+
+.field label {
+    color: var(--text-color)
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #516d91;
+    background-color: var(--button-color);
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.333);
+    border-radius: 5px;
+    padding: 16px 24px 16px 28px;
+    transform: translate(0px, 0px) rotate(0deg);
+    transition: 0.2s;
+    box-shadow: none;
+    width: 100%;
+    color: var(--text-color);
+}
+
+.button:active {
+    box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px var(--button-hover-shadow);
+}
+
+.container-main {
+    min-height: 100dvh;
+    min-width: 100dvw;
+    background-color: var(--bg-color);
+    margin-left: 0;
+    padding: 1rem;
+}
+
+.secondary-container {
+    min-height: 100dvh;
+}
+
+/*
+.secondary-container:has(.field input:hover) {
+    height: stretch;
+}*/
+
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
         display: flex;

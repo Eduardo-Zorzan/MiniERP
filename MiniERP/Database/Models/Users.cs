@@ -10,11 +10,11 @@ namespace MiniERP.Database.Models
 		[Required, NotNull, PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 		[Required, NotNull]
-		public string Login { get; set; }
+		public string Email { get; set; }
 		[Required, NotNull]
 		public string Name { get; set; }
 		[Required, NotNull]
 		public string Token { get; set; }
-		public byte[] profileImg { get; set; }
+		public byte[] ProfileImg { get; set; }
 	}
 }

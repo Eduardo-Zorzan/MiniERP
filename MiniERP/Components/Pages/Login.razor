@@ -1,25 +1,19 @@
 ﻿@page "/"
 @using MiniERP.BusinessRules.Login.Entities
 
-<div id="container" class="mr-0">
+<div class="mr-0 container-main">
 	<content >
-		<div>
-			<label class="switch">
-				<input type="checkbox" >
-				<span class="slider"></span>
-			</label>
-		</div>
-		<div id="login-container" class="p-0 flex-md-column align-items-center justify-content-center">
+		<div class="p-0 flex-md-column align-items-center justify-content-center secondary-container">
 			<div class="mb-2 mt-2 d-flex justify-content-center">
 				<img src="img/default.png" class="img-thumbnail" alt="logo" />
 			</div>
-			<div id="inpUser" class="mb-2">
+			<div id="inpUser" class="mb-2 field">
 				<label class="form-label">Login:</label>
 				<div>
 					<input class="form-control" @bind="userLogin" />
 				</div>
 			</div>
-			<div id ="inpPassword" class="mb-2">
+			<div id="inpPassword" class="mb-2 field">
 				<label class="form-label">Password:</label>
 				<div>
 					<input class="form-control" @bind="userPassword" />
@@ -30,7 +24,7 @@
 					<button id="btnLogin" class="button" @onclick="UserLogin">Access</button>
 				</div>
 				<div class="">
-					<button id="btnRegister" class="button">Register</button>
+					<a id="btnRegister" href="/register" class="button">Register</a>
 				</div>
 			</div>
 			@if (!string.IsNullOrEmpty(errorMessage))
@@ -66,4 +60,5 @@
 		}
 
 	}
+
 }

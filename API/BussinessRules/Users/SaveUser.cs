@@ -20,7 +20,7 @@ namespace API.BussinessRules.Users
 			Database.Models.Users user = new Database.Models.Users
 			{
 				Name = userData.Name,
-				Login = userData.Login,
+				Email = userData.Login,
 				Password = userData.Password
 			};
 
@@ -37,8 +37,8 @@ namespace API.BussinessRules.Users
 				throw new ArgumentException("Must have st be greater than zero.", nameof(user.Password));
 			if (string.IsNullOrWhiteSpace(user.Name))
 				throw new ArgumentException("Must have a name.", nameof(user.Name));
-			if (string.IsNullOrWhiteSpace(user.Login))
-				throw new ArgumentException("Must have a login.", nameof(user.Login));
+			if (string.IsNullOrWhiteSpace(user.Email))
+				throw new ArgumentException("Must have a login.", nameof(user.Email));
 		}
 	}
 }

@@ -74,7 +74,7 @@ namespace API.Routes
 					var user = await context
 								.Users
 								.AsNoTracking()
-								.FirstOrDefaultAsync(x => x.Login == model.Login);
+								.FirstOrDefaultAsync(x => x.Email == model.Login);
 
 					if (user == null)
 						return StatusCode(401, "User or password invalid");
