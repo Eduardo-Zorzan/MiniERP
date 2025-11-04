@@ -26,7 +26,7 @@
 .switch {
     position: absolute;
     top: 15vw;
-    left: 7vw;
+    right: 1vw;
     transform: translate(-50%, -50%);
     width: 30px;
     height: 60px;
@@ -34,11 +34,11 @@
     text-align: center;
 }
 
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
 .slider {
     position: absolute;
@@ -51,21 +51,21 @@
     transition: background-color 0.4s;
 }
 
-    .slider::before {
-        content: "🌞";
-        position: absolute;
-        width: 26px;
-        height: 26px;
-        left: 50%;
-        top: 2px;
-        transform: translate(-50%, 0);
-        display: grid;
-        place-items: center;
-        font-size: 18px;
-        border-radius: 50%;
-        background: transparent;
-        transition: transform 0.4s, content 0.4s;
-    }
+.slider::before {
+    content: "🌞";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 50%;
+    top: 2px;
+    transform: translate(-50%, 0);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    border-radius: 50%;
+    background: transparent;
+    transition: transform 0.4s, content 0.4s;
+}
 
 .switch > input:checked + .slider {
     background-color: #000429;
@@ -81,6 +81,18 @@
     --button-color: black;
     --bg-color: #0B192C;
     --text-color: rgb(255 101 0);
+}
+
+.return-btn {
+    position: absolute;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin: 3vw;
+}
+
+a, u {
+    text-decoration-line: none;
+    text-decoration-color: none;
 }
 
 .page {
