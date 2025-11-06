@@ -1,0 +1,35 @@
+.global-error-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.global-error-modal {
+    background: #222;
+    color: #fff;
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 90%;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.global-error-modal pre {
+    max-height: 200px;
+    overflow: auto;
+    background: #111;
+    padding: .5rem;
+    border-radius: 4px;
+    font-size: .75rem;
+}
+
+.global-error-modal .buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+}

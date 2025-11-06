@@ -1,15 +1,31 @@
 ﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Components.Web
+
 <div class="page">
-	<div>
-		<label class="switch">
-			<input type="checkbox">
-			<span class="slider"></span>
-		</label>
-		<label class="return-btn">
-			<a class="fa-solid fa-arrow-left"></a>
-		</label>
-	</div>
-	<main>
-		@Body
-	</main>
+    <div>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <label class="return-btn">
+            <a class="fa-solid fa-arrow-left"></a>
+        </label>
+    </div>
+    <main>
+        <ErrorBoundary  @ref="errorBoundary">
+            @Body
+        </ErrorBoundary>
+    </main>
 </div>
+
+@code {
+    private ErrorBoundary? errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+    }
+
+
+}

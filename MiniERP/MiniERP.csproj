@@ -81,4 +81,8 @@
 	  <Content Remove="wwwroot\img\default.png" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Components\Pages\Shared\" />
+	</ItemGroup>
+
 </Project>
