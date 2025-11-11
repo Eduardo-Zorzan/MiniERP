@@ -16,6 +16,7 @@ namespace MiniERP
 
 			builder.Services.AddSingleton<Database.Services.Users.IUserService, Database.Services.Users.UserService>();
 			builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddScoped<ErrorState>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

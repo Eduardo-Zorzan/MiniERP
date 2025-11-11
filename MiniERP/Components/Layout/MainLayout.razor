@@ -2,6 +2,8 @@
 
 @using Microsoft.AspNetCore.Components.Web
 
+@inject ErrorState ErrorState
+
 <div class="page">
     <div>
         <label class="switch">
@@ -12,20 +14,14 @@
             <a class="fa-solid fa-arrow-left"></a>
         </label>
     </div>
+
     <main>
-        <ErrorBoundary  @ref="errorBoundary">
-            @Body
-        </ErrorBoundary>
+        <ProcessError>
+              @Body
+        </ProcessError>
     </main>
 </div>
 
 @code {
-    private ErrorBoundary? errorBoundary;
-
-    protected override void OnParametersSet()
-    {
-        errorBoundary?.Recover();
-    }
-
 
 }

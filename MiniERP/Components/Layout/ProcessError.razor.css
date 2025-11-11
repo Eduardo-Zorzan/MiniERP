@@ -1,0 +1,18 @@
+
+.error-container {
+    background-color: rgb(183, 14, 9);
+    position: fixed;
+    width: 70vw;
+    font-size: 1.2rem;
+    color: white;
+    margin: 7.5px;
+    padding: 10px;
+    display: inline-flex;
+    align-items:center;
+    height: fit-content;
+}
+
+.error-container p {
+    margin: 0;
+    padding: 0;
+}

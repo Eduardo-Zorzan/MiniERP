@@ -1,0 +1,49 @@
+﻿@using Microsoft.Extensions.Logging
+
+@inherits ErrorBoundary
+
+@inject ErrorState ErrorState
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="error-container">
+        <div>
+            <p>
+                <i class="fas fa-exclamation-triangle"></i>
+                @_errorMessage
+            </p>
+        </div>
+    </div>
+}
+
+@ChildContent
+
+@code {
+    private string? _errorMessage;
+
+    protected override Task OnErrorAsync(Exception ex)
+    {
+        if (ErrorState.Running ?? false)
+            return Task.CompletedTask;
+
+        _errorMessage = ex.Message;
+        ErrorState.Running = true;
+
+        _ = ShowAndHideAsync();
+
+        return Task.CompletedTask;
+    }
+
+    private async Task ShowAndHideAsync()
+    {
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(5000);
+
+        _errorMessage = null;
+        ErrorState.Running = false;
+
+        Recover();
+
+        await InvokeAsync(StateHasChanged);
+    }
+}
