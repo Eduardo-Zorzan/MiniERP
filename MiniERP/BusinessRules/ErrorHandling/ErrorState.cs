@@ -1,4 +1,4 @@
 ﻿public class ErrorState
 {
-    public bool? Running { get; set; }
+    public required List<string> Running { get; set; }
 }

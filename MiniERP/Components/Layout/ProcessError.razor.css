@@ -8,8 +8,10 @@
     margin: 7.5px;
     padding: 10px;
     display: inline-flex;
-    align-items:center;
+    align-items: center;
     height: fit-content;
+    opacity: 0.9;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .error-container p {
