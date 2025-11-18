@@ -4,6 +4,7 @@
 	{
 		Task InitializeAsync();
 		Task<Models.User> GetUser(string login);
+		Task<List<Models.User>> GetUsers();
 		Task<int> AddUser(Models.User user);
 		Task<int> UpdateUser(Models.User user);
 		Task<int> DeleteUser(Models.User user);

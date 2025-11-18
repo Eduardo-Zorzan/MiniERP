@@ -1,0 +1,39 @@
+.home-grid {
+    width: 100vw;
+}
+
+.home-title {
+    text-align: center;
+    width: 100%;
+}
+
+::deep thead {
+    display: none;
+}
+
+::deep tbody {
+    width: 100%;
+}
+
+::deep tr {
+    width: 45vw;
+    float: left;
+}
+
+::deep tr .user-id {
+    visibility: hidden;
+}
+
+::deep tr .user-image {
+    width: 45vw;
+}
+
+::deep td {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+::deep table {
+    table-layout: fixed;
+}

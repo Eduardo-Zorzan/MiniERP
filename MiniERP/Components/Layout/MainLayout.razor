@@ -5,23 +5,30 @@
 @inject ErrorState ErrorState
 
 <div class="page">
-    <div>
-        <label class="switch">
-            <input type="checkbox">
-            <span class="slider"></span>
-        </label>
-        <label class="return-btn">
-            <a class="fa-solid fa-arrow-left"></a>
-        </label>
-    </div>
+	<div>
+		<label class="switch">
+			<input type="checkbox">
+			<span class="slider"></span>
+		</label>
 
-    <main>
-        <ProcessError>
-              @Body
-        </ProcessError>
-    </main>
+		@if (ShowReturnButton)
+		{
+			<label class="return-btn">
+				<a class="fa-solid fa-arrow-left"></a>
+			</label>
+		}
+	</div>
+
+	<main>
+		<ProcessError>
+			<CascadingValue Value="@ShowReturnButton">
+				@Body
+			</CascadingValue>
+		</ProcessError>
+	</main>
 </div>
 
 @code {
+	private bool ShowReturnButton = true;
 
 }

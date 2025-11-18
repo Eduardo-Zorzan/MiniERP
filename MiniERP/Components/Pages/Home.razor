@@ -1,0 +1,56 @@
+﻿@page "/"
+@using MiniERP.Database.Models
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<div class="container-main">
+	<div class="home-title">
+		<h1>HOME</h1>
+	</div>
+
+	<QuickGrid Items="Users">
+		<TemplateColumn Title="Id">
+			<label class="user-id">
+				@context.Id
+			</label>
+		</TemplateColumn>
+		<TemplateColumn Title="ProfileImg">
+			@if (context.Id != 0)
+			{
+				<a>
+					<img src="data:img; base64,@context.ProfileImg" class="user-image" />
+				</a>
+			}
+			else
+			{
+				<div class="add-user">
+					<a href="/register">
+						<i class="fas fa-plus-circle"></i>
+						<p>Add New User</p>
+					</a>
+				</div>
+			}
+		</TemplateColumn>
+		<PropertyColumn Property="@(p => p.Name)" Sortable="false" />
+	</QuickGrid>
+
+</div>
+
+@code {
+	[CascadingParameter]
+	public bool ShowReturnButton { get; set; }
+	private IQueryable<User> Users;
+
+	protected override async Task OnInitializedAsync()
+	{
+		List<User> usersList = await new MiniERP.Database.Services.Users.UserService().GetUsers();
+
+		usersList.Add(new User
+		{
+			Id = 0
+		});
+		Users = usersList.AsQueryable();
+
+		ShowReturnButton = false;
+	}
+
+}

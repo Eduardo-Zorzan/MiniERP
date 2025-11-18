@@ -19,6 +19,13 @@ namespace MiniERP.Database.Services.Users
 			return await user.FirstOrDefaultAsync();
 		}
 
+		public async Task<List<Models.User>> GetUsers()
+		{
+			await InitializeAsync();
+
+			return await _db.Table<Models.User>().ToListAsync();
+		}
+
 		public async Task<int> AddUser(Models.User user)
 		{
 			await InitializeAsync();
