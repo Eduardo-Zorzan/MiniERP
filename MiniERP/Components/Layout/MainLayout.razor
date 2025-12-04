@@ -10,25 +10,15 @@
 			<input type="checkbox">
 			<span class="slider"></span>
 		</label>
-
-		@if (ShowReturnButton)
-		{
-			<label class="return-btn">
-				<a class="fa-solid fa-arrow-left"></a>
-			</label>
-		}
 	</div>
 
 	<main>
 		<ProcessError>
-			<CascadingValue Value="@ShowReturnButton">
 				@Body
-			</CascadingValue>
 		</ProcessError>
 	</main>
 </div>
 
 @code {
-	private bool ShowReturnButton = true;
 
 }

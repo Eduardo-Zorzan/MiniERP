@@ -44,7 +44,7 @@ namespace MiniERP.BusinessRules.API.User
             if (response.IsSuccessStatusCode)
                 return;
 
-            throw new Exception("Login or Password incorrects");
+            throw new Exception(response.StatusCode.ToString());
         }
 
         public static async Task Update(Register.Entities.User user)

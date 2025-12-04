@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+.add-user ::deep a, .home-title {
+    color: var(--text-color);
+}
+
 ::deep thead {
     display: none;
 }

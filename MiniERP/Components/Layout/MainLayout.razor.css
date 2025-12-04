@@ -90,7 +90,7 @@
     margin: 3vw;
 }
 
-a, u {
+::deep a, ::deep u {
     text-decoration-line: none;
     text-decoration-color: none;
 }
