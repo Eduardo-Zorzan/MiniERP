@@ -1,7 +1,5 @@
 ﻿@page "/register"
 
-@using MiniERP.BusinessRules.Files.Entities
-
 <div class="container-main">
 	<label class="return-btn">
 		<a href="/" class="fa-solid fa-arrow-left"></a>
@@ -20,10 +18,17 @@
 							<i class="fa-solid fa-camera"></i>
 						</div>
 					</label>
-				} 
+				}
 				else
 				{
-					<p>sdfsdfsdfsdfsdf</p>
+					<label class="custom-file-upload">
+
+						<button type="button" class="btn-delete-overlay" @onclick="DeleteImage">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+
+						<img src="@_imageUrl" />
+					</label>
 				}
 			</div>
 			<div id="inpEmail" class="mb-2 field">
@@ -61,36 +66,40 @@
 </div>
 
 @code {
-	private LazyBrowserFileStream _selectedFile;
-	private string _imageUrl;
+	private string? _imageUrl;
+	private string? _base64;
+	private string? imageBase64
+	{
+		get => _base64;
+		set
+		{
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				_imageUrl = null;
+				_base64 = null;
+			}
+
+			_imageUrl = $"{value}";
+			_base64 = value;
+		}
+	}
 
 	public async Task PickAndShow()
 	{
 		try
 		{
-			var customFileType = new FilePickerFileType(
-				new Dictionary<DevicePlatform, IEnumerable<string>>
-				{
-					{ DevicePlatform.iOS, new[] { "public.my.comic.extension" } }, // UTType values
-                    { DevicePlatform.Android, new[] { "application/comics" } }, // MIME type
-                    { DevicePlatform.WinUI, new[] { ".cbr", ".cbz" } }, // file extension
-                    { DevicePlatform.Tizen, new[] { "*/*" } },
-					{ DevicePlatform.macOS, new[] { "cbr", "cbz" } }, // UTType values
-                });
-
 			PickOptions options = new()
 			{
 				PickerTitle = "Please select a comic file",
-				FileTypes = customFileType,
+				FileTypes = FilePickerFileType.Images,
 			};
 			var result = await FilePicker.Default.PickAsync(options);
 			if (result != null)
 			{
 				if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-				  result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+						result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
 				{
-					using var stream = await result.OpenReadAsync();
-					var image = ImageSource.FromStream(() => stream);
+					imageBase64 = PopulateImageFromStream(await result.OpenReadAsync());
 				}
 			}
 
@@ -103,17 +112,22 @@
 
 	}
 
-	private string PopulateImageFromStream(LazyBrowserFileStream stream)
-    {
+	private string PopulateImageFromStream(Stream stream)
+	{
 		MemoryStream ms = new MemoryStream();
 		stream.CopyTo(ms);
 		byte[] byteArray = ms.ToArray();
 		var b64String = Convert.ToBase64String(byteArray);
-		return "data:image/png;base64," + b64String;
-    }
+		return b64String;
+	}
 
 	private async Task UserRegister()
 	{
-        throw new Exception("Not implemented yet.");
-    }
+		throw new Exception("Not implemented yet.");
+	}
+
+	private void DeleteImage()
+	{
+		imageBase64 = null;
+	}
 }

@@ -90,6 +90,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="BusinessRules\Files\Entites\" />
 	  <Folder Include="Components\Pages\Shared\" />
 	</ItemGroup>
 
