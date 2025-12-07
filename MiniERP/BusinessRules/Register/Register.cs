@@ -30,12 +30,12 @@ namespace MiniERP.BusinessRules.Register
 
             if (_user.Edit)
             {
-                await API.User.UserV1.Register(_user);
+                await API.User.UserV1.Update(_user);
                 await _userService.UpdateUser(user);
             }
             else
             {
-                await API.User.UserV1.Update(_user);
+                await API.User.UserV1.Register(_user);
                 await _userService.AddUser(user);
             }
 

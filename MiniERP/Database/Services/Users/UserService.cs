@@ -34,11 +34,13 @@ namespace MiniERP.Database.Services.Users
 
 		public async Task<int> DeleteUser(Models.User user)
 		{
+			await InitializeAsync();
 			return await _db.DeleteAsync(user);
 		}
 
 		public async Task<int> UpdateUser(Models.User user)
 		{
+			await InitializeAsync();
 			return await _db.UpdateAsync(user);
 		}
 	}

@@ -1,4 +1,4 @@
-﻿@page "/register"
+﻿@page "/register/{idUser:int}"
 
 <div class="container-main">
 	<label class="return-btn">
@@ -58,9 +58,12 @@
 			<div class="mb-2">
 				<button class="button" @onclick="UserRegister">Save</button>
 			</div>
-			<div>
-				<button class="button">Delete</button>
-			</div>
+			@if (idUser > -1)
+			{
+				<div>
+					<button class="button">Delete</button>
+				</div>	
+			}
 		</div>
 	</content>
 </div>
@@ -77,12 +80,16 @@
 			{
 				_imageUrl = null;
 				_base64 = null;
+			} else
+			{
+				_imageUrl = $"data:image/png;base64,{value}";
+				_base64 = value;
 			}
-
-			_imageUrl = $"{value}";
-			_base64 = value;
 		}
 	}
+
+	[Parameter]
+	public int idUser { get; set; }
 
 	public async Task PickAndShow()
 	{
@@ -129,5 +136,10 @@
 	private void DeleteImage()
 	{
 		imageBase64 = null;
+	}
+
+	protected override void OnParametersSet()
+	{
+		idUser = idUser;
 	}
 }
