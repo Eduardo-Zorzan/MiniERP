@@ -1,4 +1,5 @@
-﻿using API.BussinessRules.Cryptography;
+﻿using System.Security;
+using API.BussinessRules.Cryptography;
 using API.BussinessRules.Cryptography.Entities;
 using API.BussinessRules.JWT;
 using API.BussinessRules.Users;
@@ -11,106 +12,99 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Routes
 {
-	[Authorize]
-	[Route("api/user")]
-	[ApiController]
-	public class UserController : ControllerBase
-	{
+    [Authorize]
+    [Route("api/user/v1")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] User model,
+            [FromServices] Context context)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-		[AllowAnonymous]
-		[HttpPost("v1/register")]
-		public async Task<IActionResult> Register([FromBody] User model,
-											  [FromServices] Context context)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
+            var user = new User
+            {
+                Name = model.Name,
+                Login = model.Login,
+                Password = "",
+                ProfileImage = model.ProfileImage,
+            };
 
-			var user = new User
-			{
-				Name = model.Name,
-				Login = model.Login,
-				Password = ""
-			};
+            string? evString = Environment.GetEnvironmentVariable("EV");
+            string? keyString = Environment.GetEnvironmentVariable("KEY");
 
-			string? evString = Environment.GetEnvironmentVariable("EV");
-			string? keyString = Environment.GetEnvironmentVariable("KEY");
+            Env.Load();
+            if (string.IsNullOrWhiteSpace(evString) || string.IsNullOrWhiteSpace(keyString))
+                throw new Exception("Key encryption not set on .env file");
 
-			Env.Load();
-			if (string.IsNullOrWhiteSpace(evString) || string.IsNullOrWhiteSpace(keyString))
-				throw new Exception("Key encryption not set on .env file");
+            byte[] ev = Convert.FromBase64String(evString);
+            byte[] key = Convert.FromBase64String(keyString);
 
-			byte[] ev = Convert.FromBase64String(evString);
-			byte[] key = Convert.FromBase64String(keyString);
+            user.Password = await Cryptography.Encrypt(model.Password ?? "", key, ev);
 
-			user.Password = await Cryptography.Encrypt(model.Password, key, ev);
+            try
+            {
+                new SaveUser(context).Save(user, true);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-			try
-			{
-				new SaveUser(context).Save(user, true);
-				return Ok($"{user.Login} {model.Password}");
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-		}
+        [AllowAnonymous]
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] User model,
+            [FromServices] Context context)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var user = new User
+            {
+                Name = model.Name,
+                Login = model.Login,
+                Password = "",
+                ProfileImage = model.ProfileImage,
+            };
 
-		[AllowAnonymous]
-		[HttpPost("v1/login")]
-		public async Task<IActionResult> Login(
-	   [FromBody] User model,
-	   [FromServices] Context context,
-	   [FromServices] TokenService tokenService)
-		{
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                try
+                {
+                    await new BussinessRules.Login.TryLogin(context).Login(model);
+                }
+                catch (VerificationException ex)
+                {
+                    return StatusCode(401, ex.Message);
+                }
+            }
 
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState.Values);
+            string? evString = Environment.GetEnvironmentVariable("EV");
+            string? keyString = Environment.GetEnvironmentVariable("KEY");
 
-			if (string.IsNullOrWhiteSpace(model.Token))
-			{
-				try
-				{
-					var user = await context
-								.Users
-								.AsNoTracking()
-								.FirstOrDefaultAsync(x => x.Email == model.Login);
+            Env.Load();
+            if (string.IsNullOrWhiteSpace(evString) || string.IsNullOrWhiteSpace(keyString))
+                throw new Exception("Key encryption not set on .env file");
 
-					if (user == null)
-						return StatusCode(401, "User or password invalid");
+            byte[] ev = Convert.FromBase64String(evString);
+            byte[] key = Convert.FromBase64String(keyString);
 
-					CriptographyReturn criptography = new CriptographyReturn
-					{
-						Output = user.Password,
-						Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
-						Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
-					};
+            user.Password = await Cryptography.Encrypt(model.Password ?? "", key, ev);
 
-					if (!(model.Password ?? "").Equals(await Cryptography.Decrypt(criptography)))
-						return StatusCode(401, "User or password invalid");
-
-					model.Token = tokenService.GenerateToken(model);
-					model.Name = user.Name;
-
-					return Ok(model);
-				}
-				catch 
-				{
-					return StatusCode(500, "Internal Error");
-				}
-			}
-			else
-			{
-				try
-				{
-					tokenService.ValidateToken(model.Token);
-					return Ok();
-				}
-				catch
-				{
-					return StatusCode(401, "Unauthorized");
-				}
-			}
-		}
-	}
+            try
+            {
+                await new UpdateUser(context).Update(user, true);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
 }

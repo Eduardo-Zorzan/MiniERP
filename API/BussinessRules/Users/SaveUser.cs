@@ -21,7 +21,8 @@ namespace API.BussinessRules.Users
 			{
 				Name = userData.Name,
 				Email = userData.Login,
-				Password = userData.Password
+				Password = userData.Password,
+				ProfileImage =  userData.ProfileImage,
 			};
 
 			Validate(user);

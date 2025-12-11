@@ -25,7 +25,8 @@ namespace MiniERP.BusinessRules.Register
             Database.Models.User user = new Database.Models.User
             {
                 Email = _user.Email,
-                Name = _user.Name ?? ""
+                Name = _user.Name,
+                ProfileImg = _user.ProfileImage
             };
 
             if (_user.Edit)

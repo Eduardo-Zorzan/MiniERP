@@ -1,4 +1,5 @@
 ﻿@page "/register/{idUser:int}"
+@using MiniERP.BusinessRules.Register.Entities
 
 <div class="container-main">
 	<label class="return-btn">
@@ -27,119 +28,149 @@
 							<i class="fas fa-trash-alt"></i>
 						</button>
 
-						<img src="@_imageUrl" />
+						<img src="@_imageUrl"/>
 					</label>
 				}
 			</div>
 			<div id="inpEmail" class="mb-2 field">
 				<label class="form-label">Email:</label>
 				<div>
-					<input class="form-control" />
+					<input class="form-control" @bind="_email"/>
 				</div>
 			</div>
 			<div id="inpName" class="mb-2 field">
 				<label class="form-label">Name:</label>
 				<div>
-					<input class="form-control" />
+					<input class="form-control" @bind="_name"/>
 				</div>
 			</div>
+
+			@if (_edit)
+			{
+				<div id="inpActualPassword" class="mb-2 field">
+					<label class="form-label">Actual Password:</label>
+					<div>
+						<input class="form-control" @bind="_actualPassword"/>
+					</div>
+				</div>
+			}
+
 			<div id="inpPassword" class="mb-2 field">
 				<label class="form-label">Password:</label>
 				<div>
-					<input class="form-control" />
+					<input class="form-control" @bind="_password"/>
 				</div>
 			</div>
 			<div id="inpConfirmPassword" class="mb-2 field">
 				<label class="form-label">Confirm Password:</label>
 				<div>
-					<input class="form-control" />
+					<input class="form-control" @bind="_confirmPassword"/>
 				</div>
 			</div>
 			<div class="mb-2">
 				<button class="button" @onclick="UserRegister">Save</button>
 			</div>
-			@if (idUser > -1)
+			@if (_edit)
 			{
 				<div>
 					<button class="button">Delete</button>
-				</div>	
+				</div>
 			}
 		</div>
 	</content>
 </div>
 
 @code {
+	private string? _actualPassword;
+	private string? _password;
+	private string? _confirmPassword;
+	private string? _email;
+	private string? _name;
 	private string? _imageUrl;
-	private string? _base64;
-	private string? imageBase64
+	private byte[]? _bytes;
+
+	private byte[]? bytesImage
 	{
-		get => _base64;
+		get => _bytes;
 		set
 		{
-			if (string.IsNullOrWhiteSpace(value))
+			if (value is null)
 			{
 				_imageUrl = null;
-				_base64 = null;
-			} else
+				_bytes = null;
+			}
+			else
 			{
-				_imageUrl = $"data:image/png;base64,{value}";
-				_base64 = value;
+				_imageUrl = $"data:image/png;base64,{Convert.ToBase64String(value) ?? string.Empty}";
+				_bytes = value;
 			}
 		}
 	}
 
+	private bool _edit = false;
+	private int _idUser;
+
 	[Parameter]
-	public int idUser { get; set; }
+	public int idUser
+	{
+		get => _idUser;
+		set
+		{
+			_idUser = value;
+			_edit = value > -1;
+		}
+	}
 
 	public async Task PickAndShow()
 	{
-		try
+		PickOptions options = new()
 		{
-			PickOptions options = new()
+			PickerTitle = "Please select a comic file",
+			FileTypes = FilePickerFileType.Images,
+		};
+		var result = await FilePicker.Default.PickAsync(options);
+		if (result != null)
+		{
+			if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+			    result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
 			{
-				PickerTitle = "Please select a comic file",
-				FileTypes = FilePickerFileType.Images,
-			};
-			var result = await FilePicker.Default.PickAsync(options);
-			if (result != null)
-			{
-				if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-						result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
-				{
-					imageBase64 = PopulateImageFromStream(await result.OpenReadAsync());
-				}
+				bytesImage = PopulateImageFromStream(await result.OpenReadAsync());
 			}
-
-			//return result;
 		}
-		catch (Exception ex)
-		{
-			// The user canceled or something went wrong
-		}
-
 	}
 
-	private string PopulateImageFromStream(Stream stream)
+	private byte[] PopulateImageFromStream(Stream stream)
 	{
 		MemoryStream ms = new MemoryStream();
 		stream.CopyTo(ms);
 		byte[] byteArray = ms.ToArray();
-		var b64String = Convert.ToBase64String(byteArray);
-		return b64String;
+		return byteArray;
 	}
 
 	private async Task UserRegister()
 	{
-		throw new Exception("Not implemented yet.");
+		User user = new User()
+		{
+			Name = _name ?? "",
+			Email = _email ?? "",
+			ProfileImage = _bytes,
+			ActualPassword = _actualPassword,
+			Password = _password ?? "",
+			ConfirmPassword = _confirmPassword ?? "",
+			Edit = _edit
+		};
+		
+		await new BusinessRules.Register.Register(user).TryRegister();
 	}
 
 	private void DeleteImage()
 	{
-		imageBase64 = null;
+		bytesImage = null;
 	}
 
 	protected override void OnParametersSet()
 	{
 		idUser = idUser;
 	}
+
 }
