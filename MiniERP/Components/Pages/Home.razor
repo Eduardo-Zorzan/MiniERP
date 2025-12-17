@@ -6,32 +6,35 @@
 	<div class="home-title">
 		<h1>HOME</h1>
 	</div>
-
-	<QuickGrid Items="Users">
-		<TemplateColumn Title="Id">
-			<label class="user-id">
-				@context.Id
-			</label>
-		</TemplateColumn>
-		<TemplateColumn Title="ProfileImg">
-			@if (context.Id != 0)
-			{
-				<a>
-					<img src="data:img; base64,@context.ProfileImg" class="user-image" />
-				</a>
-			}
-			else
-			{
-				<div class="add-user">
-					<a href="/register/-1">
-						<i class="fas fa-plus-circle"></i>
-						<p>Add New User</p>
-					</a>
-				</div>
-			}
-		</TemplateColumn>
-		<PropertyColumn Property="@(p => p.Name)" Sortable="false" />
-	</QuickGrid>
+	<div class="grid-container">
+		<QuickGrid Items="Users">
+			<TemplateColumn Title="Id">
+				<label class="user-id">
+					@context.Id
+				</label>
+			</TemplateColumn>
+			<TemplateColumn Title="ProfileImg">
+				@if (context.Id != 0)
+				{
+					<div>
+						<a href="/register/@context.Id">
+							<img src="data:image/png;base64,@(context.ProfileImg is null ? string.Empty : Convert.ToBase64String(context.ProfileImg))" class="user-image" />
+						</a>
+					</div>
+				}
+				else
+				{
+					<div class="add-user">
+						<a href="/register/-1">
+							<i class="fas fa-plus-circle"></i>
+							<p>Add New User</p>
+						</a>
+					</div>
+				}
+			</TemplateColumn>
+			<PropertyColumn Property="@(p => p.Name)" Sortable="false" />
+		</QuickGrid>
+	</div>
 
 </div>
 

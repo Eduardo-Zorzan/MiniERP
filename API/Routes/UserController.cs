@@ -1,14 +1,11 @@
-﻿using System.Security;
-using API.BussinessRules.Cryptography;
-using API.BussinessRules.Cryptography.Entities;
-using API.BussinessRules.JWT;
+﻿using API.BussinessRules.Cryptography;
 using API.BussinessRules.Users;
 using API.BussinessRules.Users.Entities;
 using API.Database;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security;
 
 namespace API.Routes
 {
@@ -28,15 +25,15 @@ namespace API.Routes
             var user = new User
             {
                 Name = model.Name,
-                Login = model.Login,
+                Email = model.Email,
                 Password = "",
                 ProfileImage = model.ProfileImage,
             };
+            Env.Load();
 
             string? evString = Environment.GetEnvironmentVariable("EV");
             string? keyString = Environment.GetEnvironmentVariable("KEY");
 
-            Env.Load();
             if (string.IsNullOrWhiteSpace(evString) || string.IsNullOrWhiteSpace(keyString))
                 throw new Exception("Key encryption not set on .env file");
 
@@ -67,7 +64,7 @@ namespace API.Routes
             var user = new User
             {
                 Name = model.Name,
-                Login = model.Login,
+                Email = model.Email,
                 Password = "",
                 ProfileImage = model.ProfileImage,
             };

@@ -1,12 +1,13 @@
-﻿using System.Security;
-using API.BussinessRules.Cryptography;
+﻿using API.BussinessRules.Cryptography;
 using API.BussinessRules.Cryptography.Entities;
 using API.BussinessRules.JWT;
 using API.BussinessRules.Users.Entities;
 using API.Database;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security;
 
 namespace API.BussinessRules.Login;
 
@@ -33,14 +34,16 @@ public class TryLogin
         var user = await _context
             .Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email == model.Login);
+            .FirstOrDefaultAsync(x => x.Email == model.Email);
 
         if (user == null)
             throw new VerificationException("User or password invalid");
         
-        string passwordToCheck = string.IsNullOrWhiteSpace(model.ActualPassword) ? user.Password : model.ActualPassword; 
-        
-        CriptographyReturn criptography = new CriptographyReturn
+        string passwordToCheck = string.IsNullOrWhiteSpace(model.ActualPassword) ? user.Password : model.ActualPassword;
+
+		Env.Load();
+
+		CriptographyReturn criptography = new CriptographyReturn
         {
             Output = passwordToCheck,
             Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),

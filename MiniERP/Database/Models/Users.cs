@@ -14,6 +14,6 @@ namespace MiniERP.Database.Models
 		[Required, NotNull]
 		public string Name { get; set; }
 		public string Token { get; set; }
-		public byte[] ProfileImg { get; set; }
+		public byte[]? ProfileImg { get; set; }
 	}
 }

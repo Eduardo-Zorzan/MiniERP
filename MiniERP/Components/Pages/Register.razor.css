@@ -12,6 +12,7 @@
     border-radius: 10px;
     box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
     position: relative;
+    z-index: 1;
 }
 
 .upload-icon {

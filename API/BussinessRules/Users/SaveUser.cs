@@ -20,7 +20,7 @@ namespace API.BussinessRules.Users
 			Database.Models.Users user = new Database.Models.Users
 			{
 				Name = userData.Name,
-				Email = userData.Login,
+				Email = userData.Email,
 				Password = userData.Password,
 				ProfileImage =  userData.ProfileImage,
 			};

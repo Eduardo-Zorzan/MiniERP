@@ -17,13 +17,13 @@ public class UpdateUser
 
     public async Task Update(User user, bool persistEntites)
     {
-        Database.Models.Users? userToUpdate = await _context.Users.Where(x => x.Email.Equals(user.Login)).FirstOrDefaultAsync();
+        Database.Models.Users? userToUpdate = await _context.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefaultAsync();
         
         if(userToUpdate is null)
             return;
         
-        if (!string.IsNullOrWhiteSpace(user.Login))
-            userToUpdate.Email =  user.Login;
+        if (!string.IsNullOrWhiteSpace(user.Email))
+            userToUpdate.Email =  user.Email;
         
         if (!string.IsNullOrWhiteSpace(user.Password))
             userToUpdate.Password = user.Password;
