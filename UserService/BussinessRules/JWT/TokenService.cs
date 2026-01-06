@@ -1,10 +1,10 @@
-﻿using API.BussinessRules.Users.Entities;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using UserService.BussinessRules.Users.Entities;
 
-namespace API.BussinessRules.JWT
+namespace UserService.BussinessRules.JWT
 {
 	public class TokenService
 	{

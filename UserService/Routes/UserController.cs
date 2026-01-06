@@ -1,13 +1,15 @@
-﻿using API.BussinessRules.Cryptography;
-using API.BussinessRules.Users;
-using API.BussinessRules.Users.Entities;
-using API.Database;
+﻿using UserService.BussinessRules.Users;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System.Security;
+using UserService.BussinessRules.Cryptography;
+using UserService.BussinessRules.JWT;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
-namespace API.Routes
+namespace UserService.Routes
 {
     [Authorize]
     [Route("api/user/v1")]
@@ -103,5 +105,28 @@ namespace API.Routes
                 return StatusCode(500, ex.Message);
             }
         }
-    }
+
+		[AllowAnonymous]
+		[HttpDelete]
+		public async Task<IActionResult> Delete(string login,
+                                                [FromServices] Context context,
+												[FromServices] TokenService tokenService)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			string accessToken = Request.Headers[HeaderNames.Authorization].ToString();
+
+			try
+			{
+			    tokenService.ValidateToken(accessToken);
+			    await new UserService.BussinessRules.Users.DeleteUser(context).Delete(login, true);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, ex.Message);
+			}
+		}
+	}
 }

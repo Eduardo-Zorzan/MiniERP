@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.BussinessRules.Cryptography.Entities
+namespace UserService.BussinessRules.Cryptography.Entities
 {
 	public class CriptographyReturn
 	{

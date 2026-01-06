@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MiniERP
+namespace MiniERP.Platforms.MacCatalyst
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

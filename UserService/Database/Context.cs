@@ -1,11 +1,12 @@
 ﻿using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using UserService.Database.Models;
 
-namespace API.Database
+namespace UserService.Database
 {
 	public class Context : DbContext
 	{
-		public DbSet<Models.Users> Users => Set<Models.Users>();
+		public DbSet<Users> Users => Set<Users>();
 
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
 		{

@@ -1,10 +1,11 @@
 ﻿using System.Security.Cryptography;
+using UserService.BussinessRules.Cryptography.Entities;
 
-namespace API.BussinessRules.Cryptography
+namespace UserService.BussinessRules.Cryptography
 {
 	public class Cryptography
 	{
-		public static async Task<Entities.CriptographyReturn> Encrypt(string input)
+		public static async Task<CriptographyReturn> Encrypt(string input)
 		{
 			if	(string.IsNullOrEmpty(input))
 				throw new ArgumentException("Input cannot be null or empty.", nameof(input));
@@ -19,7 +20,7 @@ namespace API.BussinessRules.Cryptography
 				iv = tripleDes.IV;
 			}
 
-			Entities.CriptographyReturn criptographyReturn = new Entities.CriptographyReturn
+			CriptographyReturn criptographyReturn = new CriptographyReturn
 			{
 				Key = key,
 				Iv = iv,
@@ -29,7 +30,7 @@ namespace API.BussinessRules.Cryptography
 			return criptographyReturn;
 		}
 
-		public static async Task<string> Decrypt(Entities.CriptographyReturn criptography)
+		public static async Task<string> Decrypt(CriptographyReturn criptography)
 		{
 
 			return await DecryptTextFromFile(criptography.Output, criptography.Key, criptography.Iv);

@@ -1,8 +1,8 @@
-﻿using API.BussinessRules.Users.Entities;
-using API.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
-namespace API.BussinessRules.Users;
+namespace UserService.BussinessRules.Users;
 
 public class UpdateUser
 {
@@ -17,7 +17,7 @@ public class UpdateUser
 
     public async Task Update(User user, bool persistEntites)
     {
-        Database.Models.Users? userToUpdate = await _context.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefaultAsync();
+		Database.Models.Users? userToUpdate = await _context.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefaultAsync();
         
         if(userToUpdate is null)
             return;

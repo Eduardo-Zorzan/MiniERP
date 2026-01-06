@@ -1,8 +1,8 @@
-﻿using API.BussinessRules.Users.Entities;
-using API.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
-namespace API.BussinessRules.Users
+namespace UserService.BussinessRules.Users
 {
 	public class SaveUser
 	{

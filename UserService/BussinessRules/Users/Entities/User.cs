@@ -1,4 +1,4 @@
-﻿namespace API.BussinessRules.Users.Entities
+﻿namespace UserService.BussinessRules.Users.Entities
 {
 	public class User
 	{

@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace MiniERP
+namespace MiniERP.Platforms.MacCatalyst
 {
     public class Program
     {

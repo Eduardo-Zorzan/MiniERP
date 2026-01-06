@@ -1,7 +1,7 @@
-using API.BussinessRules.JWT;
-using API.BussinessRules.Users.Entities;
-using API.Database;
 using System.Text.Json.Serialization;
+using UserService.BussinessRules.JWT;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
 
 var builder = WebApplication.CreateSlimBuilder(args);

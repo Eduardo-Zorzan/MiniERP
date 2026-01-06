@@ -68,12 +68,12 @@
 				</div>
 			</div>
 			<div class="mb-2">
-				<button class="button" @onclick="UserRegister">Save</button>
+				<button class="button" @onclick="RegisterUser">Save</button>
 			</div>
 			@if (_edit)
 			{
 				<div>
-					<button class="button">Delete</button>
+					<button class="button" @onclick="DeleteUser">Delete</button>
 				</div>
 			}
 		</div>
@@ -132,7 +132,7 @@
 		if (result != null)
 		{
 			if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-			    result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+				result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
 			{
 				bytesImage = PopulateImageFromStream(await result.OpenReadAsync());
 			}
@@ -147,7 +147,7 @@
 		return byteArray;
 	}
 
-	private async Task UserRegister()
+	private async Task RegisterUser()
 	{
 		User user = new User()
 		{
@@ -159,12 +159,34 @@
 			ConfirmPassword = _confirmPassword ?? "",
 			Edit = _edit
 		};
-		
+
 		await new BusinessRules.Register.Register(user).TryRegister();
 	}
 
 	private void DeleteImage()
 	{
+		bytesImage = null;
+	}
+
+	private async Task DeleteUser()
+	{
+		BusinessRules.Delete.Entities.User user = new BusinessRules.Delete.Entities.User()
+		{
+			Login = _email ?? "",
+			Password = _password ?? ""
+		};
+
+		await new BusinessRules.Delete.Delete(user).TryDelete();
+		Clear();
+	}
+
+	private void Clear()
+	{
+		_email = string.Empty;
+		_name = string.Empty;
+		_actualPassword = string.Empty;
+		_password = string.Empty;
+		_confirmPassword = string.Empty;
 		bytesImage = null;
 	}
 

@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MiniERP
+namespace MiniERP.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

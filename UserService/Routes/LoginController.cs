@@ -1,12 +1,12 @@
 ﻿using System.Security;
-using API.BussinessRules.JWT;
-using API.BussinessRules.Login;
-using API.BussinessRules.Users.Entities;
-using API.Database;
+using UserService.BussinessRules.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserService.BussinessRules.JWT;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
-namespace API.Routes;
+namespace UserService.Routes;
 
 [Authorize]
 [Route("api/login/v1")]

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Database.Models
+namespace UserService.Database.Models
 {
 	public sealed class Users
 	{

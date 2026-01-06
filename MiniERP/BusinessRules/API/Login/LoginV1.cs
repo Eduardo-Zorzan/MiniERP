@@ -7,7 +7,7 @@ public class LoginV1
 {
     private const string _url = "api/Login/v1";
     
-    public static async Task<BusinessRules.Login.Entities.User?> Login(BusinessRules.Login.Entities.User user, string token)
+    public static async Task<BusinessRules.Login.Entities.User?> Login(BusinessRules.Login.Entities.User user)
     {
         HttpClient client = new HttpClient();
         client.BaseAddress = new Uri("http://192.168.18.38:5078");
@@ -15,10 +15,7 @@ public class LoginV1
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response;
-        if (!string.IsNullOrWhiteSpace(token))
-            response = await client.PostAsJsonAsync(_url, token);
-        else
-            response = await client.PostAsJsonAsync(_url, user);
+        response = await client.PostAsJsonAsync(_url, user);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadFromJsonAsync<BusinessRules.Login.Entities.User>();

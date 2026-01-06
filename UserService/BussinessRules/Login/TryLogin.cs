@@ -1,15 +1,14 @@
-﻿using API.BussinessRules.Cryptography;
-using API.BussinessRules.Cryptography.Entities;
-using API.BussinessRules.JWT;
-using API.BussinessRules.Users.Entities;
-using API.Database;
-using DotNetEnv;
+﻿using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security;
+using UserService.BussinessRules.Cryptography.Entities;
+using UserService.BussinessRules.JWT;
+using UserService.BussinessRules.Users.Entities;
+using UserService.Database;
 
-namespace API.BussinessRules.Login;
+namespace UserService.BussinessRules.Login;
 
 public class TryLogin
 {
@@ -50,7 +49,7 @@ public class TryLogin
             Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
         };
 
-        if (passwordToCheck.Equals(await API.BussinessRules.Cryptography.Cryptography.Decrypt(criptography)))
+        if (passwordToCheck.Equals(await Cryptography.Cryptography.Decrypt(criptography)))
              throw new VerificationException("User or password invalid");
 
         model.Token = _tokenService.GenerateToken(model);

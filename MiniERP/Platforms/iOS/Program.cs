@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace MiniERP
+namespace MiniERP.Platforms.iOS
 {
     public class Program
     {
