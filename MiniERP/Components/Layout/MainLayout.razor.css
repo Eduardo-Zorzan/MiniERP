@@ -22,6 +22,12 @@
     initial-value: black;
 }
 
+@property --text-color-input {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: black;
+}
+
 /* From Uiverse.io by zebra76966 */
 .switch {
     position: absolute;
@@ -81,6 +87,16 @@
     --button-color: black;
     --bg-color: #0B192C;
     --text-color: rgb(255 101 0);
+    --text-color-input: white;
+}
+
+::deep input {
+    color: var(--text-color-input);
+}
+
+::deep input:focus {
+    color: var(--text-color-input);
+    background-color: var(--bg-color);
 }
 
 .return-btn {

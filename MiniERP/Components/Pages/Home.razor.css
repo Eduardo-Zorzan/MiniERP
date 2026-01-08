@@ -11,6 +11,10 @@
     color: var(--text-color);
 }
 
+::deep td {
+    color: var(--text-color);
+}
+
 .container-main {
     display: flex;
     flex-direction: column;
