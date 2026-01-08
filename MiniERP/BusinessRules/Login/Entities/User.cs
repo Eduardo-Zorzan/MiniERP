@@ -8,9 +8,10 @@ namespace MiniERP.BusinessRules.Login.Entities
 {
 	public class User
 	{
-		public required string Login { get; set; }
+		public required string Email { get; set; }
 		public string? Name { get; set; }
 		public string? Password { get; set; }
+		public string? ActualPassword { get; set; }
 		public string? Token { get; set; }
 	}
 }

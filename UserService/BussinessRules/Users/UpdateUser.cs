@@ -19,7 +19,7 @@ public class UpdateUser
     {
 		Database.Models.Users? userToUpdate = await _context.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefaultAsync();
         
-        if(userToUpdate is null)
+        if (userToUpdate is null)
             return;
         
         if (!string.IsNullOrWhiteSpace(user.Email))

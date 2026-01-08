@@ -172,8 +172,8 @@
 	{
 		BusinessRules.Delete.Entities.User user = new BusinessRules.Delete.Entities.User()
 		{
-			Login = _email ?? "",
-			Password = _password ?? ""
+			Email = _email ?? "",
+			Password = _actualPassword ?? ""
 		};
 
 		await new BusinessRules.Delete.Delete(user).TryDelete();
@@ -190,9 +190,17 @@
 		bytesImage = null;
 	}
 
-	protected override void OnParametersSet()
+	protected override async void OnParametersSet()
 	{
-		idUser = idUser;
+		if (_edit)
+		{
+			Database.Models.User userData = await new MiniERP.Database.Services.Users.UserService().GetUser(_idUser);
+			_email = userData.Email;
+			_name = userData.Name;
+
+			bytesImage = userData.ProfileImg;
+			StateHasChanged();
+		};
 	}
 
 }

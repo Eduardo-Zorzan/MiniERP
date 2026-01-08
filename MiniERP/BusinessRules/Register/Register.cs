@@ -1,10 +1,5 @@
 ﻿using MiniERP.BusinessRules.Register.Entities;
 using MiniERP.Database.Services.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniERP.BusinessRules.Register
 {
@@ -20,29 +15,37 @@ namespace MiniERP.BusinessRules.Register
         }
         public async Task TryRegister()
         {
-            await Validate();
+            Validate();
 
-            Database.Models.User user = new Database.Models.User
-            {
-                Email = _user.Email,
-                Name = _user.Name,
-                ProfileImg = _user.ProfileImage
-            };
 
             if (_user.Edit)
             {
                 await API.User.UserV1.Update(_user);
+
+                Database.Models.User user = await _userService.GetUser(_user.Email);
+
+                user.Email = _user.Email;
+                user.Name = _user.Name;
+                user.ProfileImg = _user.ProfileImage;
+
                 await _userService.UpdateUser(user);
             }
             else
             {
-                await API.User.UserV1.Register(_user);
+				Database.Models.User user = new Database.Models.User
+				{
+					Email = _user.Email,
+					Name = _user.Name,
+					ProfileImg = _user.ProfileImage
+				};
+
+				await API.User.UserV1.Register(_user);
                 await _userService.AddUser(user);
             }
 
         }
 
-        private async Task Validate()
+        private void Validate()
         {
             if (_user == null)
                 throw new Exception("User not found.");
@@ -50,17 +53,9 @@ namespace MiniERP.BusinessRules.Register
             if (string.IsNullOrWhiteSpace(_user.Email))
                 throw new Exception("Email is blank.");
 
-            if (string.IsNullOrWhiteSpace(_user.Password))
-                throw new Exception("Password is blank");
-
-            if (string.IsNullOrWhiteSpace(_user.ConfirmPassword))
-                throw new Exception("Confirm Password is blank");
-
-            if (!_user.Password.Equals(_user.ConfirmPassword))
-                throw new Exception("Password and Confirm Password do not match.");
-
-            if (await _userService.GetUser(_user.Email) != null)
-                throw new Exception("Email already registered");
-        }
+            if (!string.IsNullOrWhiteSpace(_user.Password)
+                && !_user.Password.Equals(_user.ConfirmPassword))
+				throw new Exception("Password and Confirm Password do not match.");
+		}
     }
 }

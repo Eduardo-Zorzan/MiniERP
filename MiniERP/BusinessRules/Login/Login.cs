@@ -16,7 +16,7 @@ namespace MiniERP.BusinessRules.Login
 			Validate();
 
 			var userService = new UserService();
-			Database.Models.User user = await userService.GetUser(_user.Login);
+			Database.Models.User user = await userService.GetUser(_user.Email);
 
 			var userResult = await API.Login.LoginV1.Login(_user);
 
@@ -32,7 +32,7 @@ namespace MiniERP.BusinessRules.Login
 			{
 				user = new Database.Models.User
 				{
-					Email = _user.Login,
+					Email = _user.Email,
 					Token = _user.Token ?? "",
 					Name = _user.Name ?? ""
 				};
@@ -47,7 +47,7 @@ namespace MiniERP.BusinessRules.Login
 			if (_user == null)
 				throw new Exception("User not found.");
 
-			if (string.IsNullOrWhiteSpace(_user.Login))
+			if (string.IsNullOrWhiteSpace(_user.Email))
 				throw new Exception("Login is blank.");
 
 			if (string.IsNullOrWhiteSpace(_user.Password))

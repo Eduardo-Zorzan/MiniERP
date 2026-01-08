@@ -38,18 +38,19 @@ public class TryLogin
         if (user == null)
             throw new VerificationException("User or password invalid");
         
-        string passwordToCheck = string.IsNullOrWhiteSpace(model.ActualPassword) ? user.Password : model.ActualPassword;
+        string passwordToCheck = (string.IsNullOrWhiteSpace(model.ActualPassword) ? model.Password : model.ActualPassword) ?? "";
 
 		Env.Load();
 
 		CriptographyReturn criptography = new CriptographyReturn
         {
-            Output = passwordToCheck,
+            Output = user.Password,
             Iv = Convert.FromBase64String(Environment.GetEnvironmentVariable("EV") ?? ""),
             Key = Convert.FromBase64String(Environment.GetEnvironmentVariable("KEY") ?? "")
         };
 
-        if (passwordToCheck.Equals(await Cryptography.Cryptography.Decrypt(criptography)))
+        string decryptedPassword = await Cryptography.Cryptography.Decrypt(criptography);
+		if (!passwordToCheck.Equals(decryptedPassword) || string.IsNullOrWhiteSpace(passwordToCheck))
              throw new VerificationException("User or password invalid");
 
         model.Token = _tokenService.GenerateToken(model);

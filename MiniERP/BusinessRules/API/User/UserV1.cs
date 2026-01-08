@@ -40,11 +40,11 @@ namespace MiniERP.BusinessRules.API.User
         public static async Task Delete(string login, string token)
         {
 			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri($"http://192.168.18.38:5078?login={login}");
+			client.BaseAddress = new Uri("http://192.168.18.38:5078");
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-			HttpResponseMessage response = await client.DeleteAsync(_url);
+			HttpResponseMessage response = await client.DeleteAsync(_url + $"?login={login}");
 
 			if (response.IsSuccessStatusCode)
 				return;

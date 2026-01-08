@@ -26,8 +26,8 @@ namespace MiniERP.BusinessRules.Delete
 
 			Login.Entities.User loginUser = new Login.Entities.User
 			{
-				Login = _user.Login,
-				Password = _user.Password
+				Email = _user.Email,
+				ActualPassword = _user.Password
 			};
 
 			var userResult = await API.Login.LoginV1.Login(loginUser);
@@ -35,9 +35,9 @@ namespace MiniERP.BusinessRules.Delete
 			if (userResult == null || string.IsNullOrWhiteSpace(userResult.Token))
 				throw new Exception("User not found");
 
-			await API.User.UserV1.Delete(_user.Login, userResult.Token);
+			await API.User.UserV1.Delete(_user.Email, userResult.Token);
 
-			Database.Models.User userModel = await userService.GetUser(_user.Login);
+			Database.Models.User userModel = await userService.GetUser(_user.Email);
 			await userService.DeleteUser(userModel);
 		}
 
@@ -46,7 +46,7 @@ namespace MiniERP.BusinessRules.Delete
 			if (_user == null)
 				throw new Exception("User not found.");
 
-			if (string.IsNullOrWhiteSpace(_user.Login))
+			if (string.IsNullOrWhiteSpace(_user.Email))
 				throw new Exception("Login is blank.");
 
 			if (string.IsNullOrWhiteSpace(_user.Password))
