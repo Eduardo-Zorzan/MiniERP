@@ -18,7 +18,8 @@
 				{
 					<div>
 						<a href="/register/@context.Id">
-							<img src="data:image/png;base64,@(context.ProfileImg is null ? string.Empty : Convert.ToBase64String(context.ProfileImg))" class="user-image" />
+							<img src="@(context.ProfileImg is null ? "img/default.png"
+								: $"data:image/png;base64,{Convert.ToBase64String(context.ProfileImg)}")" class="user-image" />
 						</a>
 					</div>
 				}
