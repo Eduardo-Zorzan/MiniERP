@@ -2,23 +2,33 @@
 @using MiniERP.BusinessRules.Login.Entities
 <div class="mr-0 container-main">
 	<label class="return-btn">
-		<a class="fa-solid fa-arrow-left"></a>
+		<a href="/" class="fa-solid fa-arrow-left"></a>
 	</label>
 	<content >
 		<div class="p-0 flex-md-column align-items-center justify-content-center secondary-container">
-			<div class="mb-2 mt-2 d-flex justify-content-center">
-				<img src="img/default.png" class="img-thumbnail" alt="logo" />
+			<div class="container-image mb-2">
+				@if (_imageUrl == null)
+				{	
+					<label class="custom-file-upload">
+						<img src="img/default.png" />
+					</label>
+				} else
+				{
+					<label class="custom-file-upload">
+						<img src="@_imageUrl" />
+					</label>
+				}
 			</div>
 			<div id="inpUser" class="mb-2 field">
 				<label class="form-label">Login:</label>
 				<div>
-					<input class="form-control" @bind="userLogin" />
+					<input class="form-control" @bind="_userLogin" />
 				</div>
 			</div>
 			<div id="inpPassword" class="mb-2 field">
 				<label class="form-label">Password:</label>
 				<div>
-					<input class="form-control" @bind="userPassword" />
+					<input class="form-control" @bind="_userPassword" />
 				</div>
 			</div>
 			<div class="mt-2">
@@ -26,13 +36,13 @@
 					<button id="btnLogin" class="button" @onclick="UserLogin">Access</button>
 				</div>
 				<div class="">
-					<a id="btnRegister" href="/register" class="button">Register</a>
+					<a id="btnRegister" href="/register/-1" class="button">Register</a>
 				</div>
 			</div>
-			@if (!string.IsNullOrEmpty(errorMessage))
+			@if (!string.IsNullOrEmpty(_errorMessage))
 			{
 				<div class="alert alert-danger mt-4" style="position:sticky">
-					@errorMessage
+					@_errorMessage
 				</div>
 			}
 		</div>
@@ -40,19 +50,63 @@
 </div>
 
 @code {
-	private string errorMessage = "";
-	private string userLogin = "";
-	private string userPassword = "";
+	private string _errorMessage = "";
+	private string _userLogin = "";
+	private string _userPassword = "";
+	private bool _edit = false;
+	private int _idUser;
+
+	[Parameter]
+	public int idUser
+	{
+		get => _idUser;
+		set
+		{
+			_idUser = value;
+			_edit = value > -1;
+		}
+	}
+	private string? _imageUrl;
+	private byte[]? _bytes;
+
+	private byte[]? bytesImage
+	{
+		get => _bytes;
+		set
+		{
+			if (value is null)
+			{
+				_imageUrl = null;
+				_bytes = null;
+			}
+			else
+			{
+				_imageUrl = $"data:image/png;base64,{Convert.ToBase64String(value) ?? string.Empty}";
+				_bytes = value;
+			}
+		}
+	}
 
 	private async Task UserLogin(MouseEventArgs e)
 	{
 		User user = new User
 		{
-			Email = userLogin,
-			Password = userPassword
+			Email = _userLogin,
+			Password = _userPassword
 		};
 
 		await new MiniERP.BusinessRules.Login.Login(user).TryLogin();
 	}
 
+	protected override async void OnParametersSet()
+	{
+		if (_edit)
+		{
+			Database.Models.User userData = await new MiniERP.Database.Services.Users.UserService().GetUser(_idUser);
+			_userLogin = userData.Email;
+			bytesImage = userData.ProfileImg;
+
+			StateHasChanged();
+		};
+	}
 }

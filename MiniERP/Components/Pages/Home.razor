@@ -14,24 +14,31 @@
 				</label>
 			</TemplateColumn>
 			<TemplateColumn Title="ProfileImg">
-				@if (context.Id != 0)
-				{
-					<div>
-						<a href="/register/@context.Id">
-							<img src="@(context.ProfileImg is null ? "img/default.png"
-								: $"data:image/png;base64,{Convert.ToBase64String(context.ProfileImg)}")" class="user-image" />
-						</a>
-					</div>
-				}
-				else
-				{
-					<div class="add-user">
-						<a href="/register/-1">
-							<i class="fas fa-plus-circle"></i>
-							<p>Add New User</p>
-						</a>
-					</div>
-				}
+				<div class="td-container">
+					@if (context.Id != 0)
+					{
+						<div class="container-users">
+							<a href="/login/@context.Id">
+								<img src="@(context.ProfileImg is null ? "img/default.png"
+									: $"data:image/png;base64,{Convert.ToBase64String(context.ProfileImg)}")" class="user-image" />
+							</a>
+							<div>
+								<a href="/register/@context.Id" class="btn-edit-overlay">
+									<i class="far fa-edit"></i>
+								</a>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="add-user">
+							<a href="/login/-1">
+								<i class="fas fa-plus-circle"></i>
+								<p>Add New User</p>
+							</a>
+						</div>
+					}
+				</div>
 			</TemplateColumn>
 			<PropertyColumn Property="@(p => p.Name)" Sortable="false" />
 		</QuickGrid>

@@ -55,6 +55,8 @@ public class TryLogin
 
         model.Token = _tokenService.GenerateToken(model);
         model.Name = user.Name;
+        model.ProfileImage = user.ProfileImage;
+        model.Email = user.Email;
 
         return model;
     }

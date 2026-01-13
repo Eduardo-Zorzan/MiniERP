@@ -12,6 +12,30 @@
     box-shadow: 0px 0px 8px 0px rgb(95 157 231 / 48%);
 }
 
+.container-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
+.container-image img {
+    height: 55vw;
+    width: 55vw;
+}
 
-
+.custom-file-upload {
+    height: 60vw;
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #cacaca;
+    background-color: var(--bg-color);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+}
