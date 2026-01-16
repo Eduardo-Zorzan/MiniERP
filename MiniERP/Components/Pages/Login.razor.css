@@ -18,10 +18,10 @@
     justify-content: center;
 }
 
-.container-image img {
-    height: 55vw;
-    width: 55vw;
-}
+    .container-image img {
+        height: 55vw;
+        width: 55vw;
+    }
 
 .custom-file-upload {
     height: 60vw;
@@ -33,9 +33,9 @@
     justify-content: center;
     border: 2px dashed #cacaca;
     background-color: var(--bg-color);
-    padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
     position: relative;
     z-index: 1;
+    overflow: hidden;
 }
