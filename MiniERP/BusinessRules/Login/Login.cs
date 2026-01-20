@@ -27,19 +27,23 @@ namespace MiniERP.BusinessRules.Login
 			{
 				user.Token = userResult.Token ?? "";
 				user.Name = userResult.Name ?? user.Name;
+				user.ProfileImg = userResult.ProfileImage; 
+
+				await userService.UpdateUser(user);
 			}
 			else
 			{
 				user = new Database.Models.User
 				{
-					Email = _user.Email,
-					Token = _user.Token ?? "",
-					Name = _user.Name ?? ""
+					Email = userResult.Email,
+					Token = userResult.Token ?? "",
+					Name = userResult.Name ?? "",
+					ProfileImg = userResult.ProfileImage
 				};
 
+				await userService.AddUser(user);
 			}
 
-			await userService.UpdateUser(user);
 		}
 
 		private void Validate()

@@ -35,8 +35,6 @@ namespace MiniERP.BusinessRules.Delete
 			if (userResult == null || string.IsNullOrWhiteSpace(userResult.Token))
 				throw new Exception("User not found");
 
-			await API.User.UserV1.Delete(_user.Email, userResult.Token);
-
 			Database.Models.User userModel = await userService.GetUser(_user.Email);
 			await userService.DeleteUser(userModel);
 		}

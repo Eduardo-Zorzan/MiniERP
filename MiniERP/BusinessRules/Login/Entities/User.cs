@@ -13,5 +13,6 @@ namespace MiniERP.BusinessRules.Login.Entities
 		public string? Password { get; set; }
 		public string? ActualPassword { get; set; }
 		public string? Token { get; set; }
+		public byte[]? ProfileImage { get; set; }
 	}
 }

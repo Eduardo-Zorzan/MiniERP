@@ -1,6 +1,5 @@
 
-.error-container {
-    background-color: rgb(183, 14, 9);
+.error-container, .success-container {
     position: fixed;
     width: 70vw;
     font-size: 1.2rem;
@@ -15,7 +14,15 @@
     z-index: 9999;
 }
 
-.error-container p {
-    margin: 0;
-    padding: 0;
+    .error-container p, .success-container p {
+        margin: 0;
+        padding: 0;
+    }
+
+.error-container {
+    background-color: rgb(183, 14, 9);
+}
+
+.success-container {
+    background-color: green;
 }

@@ -36,8 +36,9 @@
 		}
 	}
 }
-
-@ChildContent
+<CascadingValue Value="this">
+	@ChildContent
+</CascadingValue>
 
 @code {
 
@@ -55,7 +56,7 @@
 		return Task.CompletedTask;
 	}
 
-	public async Task ShowSuccessMessage(string message)
+	public void ShowSuccessMessage(string message)
 	{
 		State successState = new State { Message = message, Type = NotificationType.Success };
 
@@ -80,12 +81,12 @@
 		await InvokeAsync(StateHasChanged);
 	}
 
-	private void AddState(State errorState)
+	private void AddState(State state)
 	{
 		if (NotificationState.Running == null)
 			NotificationState.Running = new List<State>();
 
-		NotificationState.Running.Add(errorState);
+		NotificationState.Running.Add(state);
 	}
 
 	private bool CheckDuplicatedState(State state)

@@ -1,5 +1,6 @@
 ﻿@page "/login/{idUser:int}"
 @using MiniERP.BusinessRules.Login.Entities
+@using MiniERP.Components.Layout
 <div class="mr-0 container-main">
 	<label class="return-btn">
 		<a href="/" class="fa-solid fa-arrow-left"></a>
@@ -50,6 +51,8 @@
 </div>
 
 @code {
+	[CascadingParameter]
+	private ProcessNotification? Notification { get; set; }
 	private string _errorMessage = "";
 	private string _userLogin = "";
 	private string _userPassword = "";
@@ -96,6 +99,7 @@
 		};
 
 		await new MiniERP.BusinessRules.Login.Login(user).TryLogin();
+		Notification?.ShowSuccessMessage("Login Successful.");
 	}
 
 	protected override async void OnParametersSet()
