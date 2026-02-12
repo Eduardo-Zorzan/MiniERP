@@ -1,5 +1,8 @@
 ﻿@page "/register/{idUser:int}"
 @using MiniERP.BusinessRules.Register.Entities
+@using MiniERP.Components.Layout
+
+@inject NavigationManager NavManager
 
 <div class="container-main">
 	<label class="return-btn">
@@ -81,6 +84,8 @@
 </div>
 
 @code {
+	[CascadingParameter]
+	private ProcessNotification? Notification { get; set; }
 	private string? _actualPassword;
 	private string? _password;
 	private string? _confirmPassword;
@@ -125,7 +130,7 @@
 	{
 		PickOptions options = new()
 		{
-			PickerTitle = "Please select a comic file",
+			PickerTitle = "Please select a profile picture",
 			FileTypes = FilePickerFileType.Images,
 		};
 		var result = await FilePicker.Default.PickAsync(options);
@@ -161,6 +166,8 @@
 		};
 
 		await new BusinessRules.Register.Register(user).TryRegister();
+		Notification?.ShowSuccessMessage("User registered successful");
+		NavManager.NavigateTo("/");
 	}
 
 	private void DeleteImage()
@@ -177,7 +184,8 @@
 		};
 
 		await new BusinessRules.Delete.Delete(user).TryDelete();
-		Clear();
+		Notification?.ShowSuccessMessage("User deleted successful");
+		NavManager.NavigateTo("/");
 	}
 
 	private void Clear()
@@ -188,6 +196,7 @@
 		_password = string.Empty;
 		_confirmPassword = string.Empty;
 		bytesImage = null;
+		_edit = false;
 	}
 
 	protected override async void OnParametersSet()
@@ -195,6 +204,12 @@
 		if (_edit)
 		{
 			Database.Models.User userData = await new MiniERP.Database.Services.Users.UserService().GetUser(_idUser);
+
+			if (userData == null)
+			{
+				Clear();
+				return;
+			}
 			_email = userData.Email;
 			_name = userData.Name;
 

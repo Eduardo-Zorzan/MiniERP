@@ -1,4 +1,4 @@
-﻿using MiniERP.BusinessRules.Delete.Entities;
+using MiniERP.BusinessRules.Delete.Entities;
 using MiniERP.Database.Services.Users;
 using System;
 using System.Collections.Generic;
@@ -12,17 +12,17 @@ namespace MiniERP.BusinessRules.Delete
 	{
 
 		private User _user;
+		private UserService _userService;
 
 		public Delete(User user)
 		{
 			_user = user;
+			_userService = new UserService();
 		}
 
 		public async Task TryDelete()
 		{
 			Validate();
-
-			var userService = new UserService();
 
 			Login.Entities.User loginUser = new Login.Entities.User
 			{
@@ -35,8 +35,15 @@ namespace MiniERP.BusinessRules.Delete
 			if (userResult == null || string.IsNullOrWhiteSpace(userResult.Token))
 				throw new Exception("User not found");
 
-			Database.Models.User userModel = await userService.GetUser(_user.Email);
-			await userService.DeleteUser(userModel);
+			if (_userService == null)
+				throw new Exception("User service not initialized");
+
+			Database.Models.User userModel = await _userService.GetUser(_user.Email);
+
+			if (userModel == null)
+				throw new Exception("User not found");
+
+			await _userService.DeleteUser(userModel.Id);
 		}
 
 		private void Validate()

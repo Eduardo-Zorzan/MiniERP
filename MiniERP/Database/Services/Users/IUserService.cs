@@ -8,6 +8,6 @@
 		Task<List<Models.User>> GetUsers();
 		Task<int> AddUser(Models.User user);
 		Task<int> UpdateUser(Models.User user);
-		Task<int> DeleteUser(Models.User user);
+		Task<int> DeleteUser(int id);
 	}
 }

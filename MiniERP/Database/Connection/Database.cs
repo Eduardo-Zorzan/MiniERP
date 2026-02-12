@@ -12,7 +12,7 @@ namespace MiniERP.Database.connection
 				return;
 
 			_db = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-			var result = await _db.CreateTableAsync<T>();
+			await _db.CreateTableAsync<T>();
 		}
 
 	}

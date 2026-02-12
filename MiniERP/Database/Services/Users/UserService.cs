@@ -43,10 +43,10 @@ namespace MiniERP.Database.Services.Users
 			return await _db.InsertAsync(user);
 		}
 
-		public async Task<int> DeleteUser(Models.User user)
+		public async Task<int> DeleteUser(int id)
 		{
 			await InitializeAsync();
-			return await _db.DeleteAsync(user);
+			return await _db.DeleteAsync<Models.User>(id);
 		}
 
 		public async Task<int> UpdateUser(Models.User user)

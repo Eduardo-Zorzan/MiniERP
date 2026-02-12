@@ -69,13 +69,13 @@
 
 	private async Task ShowAndHideAsync(State state)
 	{
-
 		await InvokeAsync(StateHasChanged);
 
 		await Task.Delay(5000);
 
-		NotificationState.Running.Remove(state);
-
+		if (NotificationState.Running != null)
+			NotificationState.Running.Remove(state);
+	
 		Recover();
 
 		await InvokeAsync(StateHasChanged);
